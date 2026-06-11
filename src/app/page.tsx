@@ -18,7 +18,7 @@ export default function HomePage() {
       <FeatureSection />
       <Testimonials />
       <CTABanner />
-      <Newsletter />
+      {/* <Newsletter /> */}
       <Footer />
     </main>
   );
