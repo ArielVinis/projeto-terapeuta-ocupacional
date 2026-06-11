@@ -29,3 +29,9 @@ next-env.d.ts
 # pnpm
 pnpm-lock.yaml
 pnpm-workspace.yaml
+
+# cursor and agents
+.cursor/
+.agents/
+
+package-lock.json
