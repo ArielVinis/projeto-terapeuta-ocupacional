@@ -30,7 +30,7 @@ const services = [
   },
   {
     icon: Puzzle,
-    title: "Integracao Sensorial",
+    title: "Integração Sensorial",
     description: "Tratamento de dificuldades sensoriais e de processamento",
   },
 ];
@@ -109,7 +109,7 @@ export function FeatureSection() {
                 : {}
             }
           >
-            Servicos
+            Serviços
           </span>
           <h2
             className={`font-serif text-4xl md:text-5xl leading-tight text-foreground mb-4 text-balance ${headerVisible ? "animate-blur-in opacity-0" : "opacity-0"}`}
@@ -119,7 +119,7 @@ export function FeatureSection() {
                 : {}
             }
           >
-            Areas de Atuacao
+            Áreas de Atuação
           </h2>
           <p
             className={`text-lg text-muted-foreground max-w-2xl mx-auto ${headerVisible ? "animate-blur-in opacity-0" : "opacity-0"}`}
@@ -189,7 +189,7 @@ export function FeatureSection() {
 
             <div className="relative z-10">
               <h3 className="text-2xl md:text-3xl text-white mb-2">
-                Coordenacao Motora
+                Coordenação Motora
               </h3>
               <h3 className="text-xl md:text-2xl text-white/70 mb-4">
                 Fina e Ampla
@@ -202,7 +202,7 @@ export function FeatureSection() {
                 </div>
                 <div className="flex items-center gap-2 text-white/90 text-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-white/90" />
-                  <span>Equilibrio e Postura</span>
+                  <span>Equilíbrio e Postura</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/90 text-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-white/90" />
@@ -227,11 +227,11 @@ export function FeatureSection() {
                 Atividades de
               </h3>
               <h3 className="text-2xl md:text-3xl mb-2 text-white">
-                Vida Diaria
+                Vida Diária
               </h3>
               <p className="text-sm text-white/70 max-w-xs">
-                Desenvolvimento de independencia em autocuidado, alimentacao e
-                organizacao.
+                Desenvolvimento de independência em autocuidado, alimentação e
+                organização.
               </p>
             </div>
           </div>
@@ -294,7 +294,7 @@ export function FeatureSection() {
                   : {}
               }
             >
-              Sou Terapeuta Ocupacional com especializacao em Integracao
+              Sou Terapeuta Ocupacional com especialização em Integração
               Sensorial, focada no desenvolvimento infantil de criancas com
               autismo, TDAH e atrasos no desenvolvimento.
             </p>
@@ -306,9 +306,9 @@ export function FeatureSection() {
                   : {}
               }
             >
-              Minha missao e ajudar cada crianca a alcancar seu maximo potencial
-              atraves de intervencoes ludicas, baseadas em evidencias e
-              adaptadas as necessidades individuais de cada familia.
+              Minha missão é ajudar cada criança a alcançar seu máximo potencial
+              através de intervenções lúdicas, baseadas em evidências e
+              adaptadas as necessidades individuais de cada família.
             </p>
 
             {/* Service Cards */}

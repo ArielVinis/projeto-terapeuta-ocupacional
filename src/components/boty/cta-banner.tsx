@@ -67,11 +67,11 @@ export function CTABanner() {
             <div className="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start text-white/80">
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
-                <span className="text-sm">Segunda a Sexta</span>
+                <span className="text-sm">Segunda à Sexta</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5" />
-                <span className="text-sm">8h as 18h</span>
+                <span className="text-sm">8h às 18h</span>
               </div>
             </div>
           </div>

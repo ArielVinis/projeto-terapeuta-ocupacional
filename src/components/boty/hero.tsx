@@ -86,7 +86,7 @@ export function Hero() {
                   </div>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  +100 famílias atendidas
+                  +50 famílias atendidas
                 </span>
               </div>
               <div className="flex items-center gap-2">

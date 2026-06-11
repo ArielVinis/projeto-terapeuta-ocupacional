@@ -8,6 +8,7 @@ import { useCart } from "./cart-context";
 
 type Category = "sensorial" | "motor" | "visual" | "ebooks";
 
+// TODO: DEIXAR APENAS OS E-BOOKS
 const products = [
   // Sensorial
   {

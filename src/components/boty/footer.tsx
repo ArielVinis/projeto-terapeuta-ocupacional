@@ -12,10 +12,9 @@ const iconProps = { size: 16, stroke: 1.5, className: "size-4" };
 
 const footerLinks = {
   servicos: [
-    { name: "Avaliacao Inicial", href: "/#servicos" },
+    { name: "Avaliação Inicial", href: "/#servicos" },
     { name: "Terapia Individual", href: "/#servicos" },
-    { name: "Orientacao Familiar", href: "/#servicos" },
-    { name: "Grupos Terapeuticos", href: "/#servicos" },
+    { name: "Orientação Familiar", href: "/#servicos" },
   ],
   sobre: [
     { name: "Sobre Mim", href: "/#sobre" },
@@ -26,7 +25,7 @@ const footerLinks = {
   contato: [
     { name: "Agendar Consulta", href: "/#agendar" },
     { name: "WhatsApp", href: "https://wa.me/555596867402" },
-    { name: "Localizacao", href: "/#contato" },
+    { name: "Localização", href: "/#contato" },
   ],
 };
 
@@ -85,7 +84,7 @@ export function Footer() {
 
           {/* Servicos Links */}
           <div>
-            <h3 className="font-medium text-foreground mb-4">Servicos</h3>
+            <h3 className="font-medium text-foreground mb-4">Serviços</h3>
             <ul className="space-y-3">
               {footerLinks.servicos.map((link) => (
                 <li key={link.name}>

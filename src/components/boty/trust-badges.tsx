@@ -12,7 +12,7 @@ const badges = [
   {
     icon: Hand,
     title: "Desenvolvimento Motor",
-    description: "Coordenção e habilidades",
+    description: "Coordenação e habilidades",
   },
   {
     icon: Heart,
@@ -21,7 +21,7 @@ const badges = [
   },
   {
     icon: Users,
-    title: "Orientacao Familiar",
+    title: "Orientação Familiar",
     description: "Suporte para toda família",
   },
 ];
