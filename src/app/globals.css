@@ -6,19 +6,25 @@
 /* Vitoria Vizzotto Moreira — Terapia Ocupacional Infantil */
 :root {
   /* Brand Colors: Soft Pink, Warm Peach, Light Lavender, Sage Green, Cream */
-  --background: #FBF9F7; /* Cream */
-  --foreground: #2D3436; /* Charcoal */
-  --card: #FFF5F0; /* Soft Peach Tint */
+  --background: #FBF9F7;
+  /* Cream */
+  --foreground: #2D3436;
+  /* Charcoal */
+  --card: #FFF5F0;
+  /* Soft Peach Tint */
   --card-foreground: #2D3436;
   --popover: #FBF9F7;
   --popover-foreground: #2D3436;
-  --primary: #7BA38F; /* Sage Green */
+  --primary: #7BA38F;
+  /* Sage Green */
   --primary-foreground: #FFFFFF;
-  --secondary: #F5E6E0; /* Warm Peach */
+  --secondary: #F5E6E0;
+  /* Warm Peach */
   --secondary-foreground: #2D3436;
   --muted: #FFF5F0;
   --muted-foreground: #6B7280;
-  --accent: #E8D5E0; /* Light Lavender */
+  --accent: #E8D5E0;
+  /* Light Lavender */
   --accent-foreground: #2D3436;
   --destructive: #E57373;
   --destructive-foreground: #FFFFFF;
@@ -123,9 +129,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   html {
     scroll-behavior: smooth;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -141,22 +149,23 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Blur in animation */
+/* Fade-up animation (sem filter: blur — causa texto embaçado no mobile) */
 @keyframes blur-in {
   0% {
     opacity: 0;
-    filter: blur(12px);
     transform: translateY(10px);
   }
+
   100% {
     opacity: 1;
-    filter: blur(0);
     transform: translateY(0);
   }
 }
 
 .animate-blur-in {
-  animation: blur-in 0.8s ease-out;
+  animation: blur-in 0.8s ease-out both;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* Scale fade in animation */
@@ -165,6 +174,7 @@
     opacity: 0;
     transform: scale(0.9);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -177,9 +187,12 @@
 
 /* Float animation for playful elements */
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
