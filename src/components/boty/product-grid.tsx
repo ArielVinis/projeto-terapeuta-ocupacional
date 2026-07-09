@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useCallback,
+} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
@@ -191,7 +197,21 @@ export function ProductGrid() {
   const [headerVisible, setHeaderVisible] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const segmentRef = useRef<HTMLDivElement>(null);
+  const buttonRefs = useRef<Partial<Record<Category, HTMLButtonElement>>>({});
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
   const { addItem } = useCart();
+
+  const updateIndicator = useCallback(() => {
+    const container = segmentRef.current;
+    const button = buttonRefs.current[selectedCategory];
+    if (!container || !button) return;
+
+    setIndicatorStyle({
+      left: button.offsetLeft,
+      width: button.offsetWidth,
+    });
+  }, [selectedCategory]);
 
   const filteredProducts = products.filter(
     (product) => product.category === selectedCategory,
@@ -216,6 +236,20 @@ export function ProductGrid() {
       img.src = product.image;
     });
   }, []);
+
+  useLayoutEffect(() => {
+    updateIndicator();
+  }, [updateIndicator]);
+
+  useEffect(() => {
+    const container = segmentRef.current;
+    if (!container) return;
+
+    const observer = new ResizeObserver(() => updateIndicator());
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, [updateIndicator]);
 
   useEffect(() => {
     const gridObserver = new IntersectionObserver(
@@ -294,28 +328,27 @@ export function ProductGrid() {
 
         {/* Segmented Control */}
         <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-background rounded-full p-1 gap-1 relative vivi-shadow">
+          <div
+            ref={segmentRef}
+            className="inline-flex bg-background rounded-full p-1 gap-1 relative vivi-shadow"
+          >
             {/* Animated background slide */}
             <div
               className="absolute top-1 bottom-1 bg-primary rounded-full transition-all duration-300 ease-out shadow-sm"
               style={{
-                left:
-                  selectedCategory === "sensorial"
-                    ? "4px"
-                    : selectedCategory === "motor"
-                      ? "calc(25% + 1px)"
-                      : selectedCategory === "visual"
-                        ? "calc(50%)"
-                        : "calc(75% - 1px)",
-                width: "calc(25% - 4px)",
+                left: indicatorStyle.left,
+                width: indicatorStyle.width,
               }}
             />
             {categories.map((category) => (
               <button
                 key={category.value}
+                ref={(click) => {
+                  buttonRefs.current[category.value] = click ?? undefined;
+                }}
                 type="button"
                 onClick={() => handleCategoryChange(category.value)}
-                className={`relative z-10 px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                className={`relative z-10 whitespace-nowrap px-4.5 sm:px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === category.value
                     ? "text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground"
