@@ -19,7 +19,7 @@ const footerLinks = {
   sobre: [
     { name: "Sobre Mim", href: "/#sobre" },
     { name: "Abordagem", href: "/#sobre" },
-    { name: "Depoimentos", href: "/#depoimentos" },
+    // { name: "Depoimentos", href: "/#depoimentos" },
     { name: "Materiais", href: "/shop" },
   ],
   contato: [
