@@ -16,7 +16,7 @@ export default function HomePage() {
       <TrustBadges />
       <ProductGrid />
       <AboutMe />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <CTABanner />
       {/* <Newsletter /> */}
       <Footer />
