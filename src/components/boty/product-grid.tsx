@@ -183,10 +183,10 @@ const products = [
 ];
 
 const categories = [
+  { value: "ebooks" as Category, label: "E-books" },
   { value: "sensorial" as Category, label: "Sensorial" },
   { value: "motor" as Category, label: "Motor" },
   { value: "visual" as Category, label: "Visual" },
-  { value: "ebooks" as Category, label: "E-books" },
 ];
 
 export function ProductGrid() {
