@@ -1,7 +1,7 @@
 import { Header } from "@/src/components/boty/header";
 import { Hero } from "@/src/components/boty/hero";
 import { TrustBadges } from "@/src/components/boty/trust-badges";
-import { FeatureSection } from "@/src/components/boty/feature-section";
+import { AboutMe } from "@/src/components/boty/about-me";
 import { ProductGrid } from "@/src/components/boty/product-grid";
 import { Testimonials } from "@/src/components/boty/testimonials";
 import { CTABanner } from "@/src/components/boty/cta-banner";
@@ -15,7 +15,7 @@ export default function HomePage() {
       <Hero />
       <TrustBadges />
       <ProductGrid />
-      <FeatureSection />
+      <AboutMe />
       <Testimonials />
       <CTABanner />
       {/* <Newsletter /> */}
