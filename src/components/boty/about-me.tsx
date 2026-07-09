@@ -16,26 +16,27 @@ const services = [
     icon: Brain,
     title: "Autismo (TEA)",
     description:
-      "Intervenções baseadas em evidências para estimulação do desenvolvimento",
+      "Intervenções baseadas em evidências para estimular o desenvolvimento",
   },
   {
     icon: Sparkles,
     title: "TDAH",
-    description: "Estrategias para atenção, organização e autorregulação",
+    description: "Estratégias para atenção, organização e autorregulação",
   },
   {
     icon: Baby,
     title: "Atrasos no Desenvolvimento",
-    description: "Estimulação precoce e acompanhamento do desenvolvimento",
+    description: "Estimulação precoce e acompanhamento contínuo",
   },
   {
     icon: Puzzle,
     title: "Integração Sensorial",
-    description: "Tratamento de dificuldades sensoriais e de processamento",
+    description:
+      "Avaliação e tratamento de dificuldades sensoriais e de processamento, com base na abordagem de Ayres",
   },
 ];
 
-export function FeatureSection() {
+export function AboutMe() {
   const [isVisible, setIsVisible] = useState(false);
   const [isAboutVisible, setIsAboutVisible] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(false);
@@ -160,11 +161,11 @@ export function FeatureSection() {
                 </div>
                 <div>
                   <h3 className="text-lg text-foreground mb-1 font-medium">
-                    Ambiente Acolhedor
+                    Integração Sensorial
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Espaco projetado para estimular o desenvolvimento de forma
-                    ludica e segura.
+                    Avaliação e intervenção nas dificuldades de processamento
+                    sensorial.
                   </p>
                 </div>
               </div>
@@ -189,24 +190,21 @@ export function FeatureSection() {
 
             <div className="relative z-10">
               <h3 className="text-2xl md:text-3xl text-white mb-2">
-                Coordenação Motora
-              </h3>
-              <h3 className="text-xl md:text-2xl text-white/70 mb-4">
-                Fina e Ampla
+                Desfralde
               </h3>
 
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-white/90 text-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-white/90" />
-                  <span>Escrita e Recorte</span>
+                  <span>Acompanhamento respeitoso</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/90 text-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-white/90" />
-                  <span>Equilíbrio e Postura</span>
+                  <span>Forma gradual e segura</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/90 text-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-white/90" />
-                  <span>Planejamento Motor</span>
+                  <span>Em parceria com a família</span>
                 </div>
               </div>
             </div>
@@ -229,9 +227,9 @@ export function FeatureSection() {
               <h3 className="text-2xl md:text-3xl mb-2 text-white">
                 Vida Diária
               </h3>
-              <p className="text-sm text-white/70 max-w-xs">
-                Desenvolvimento de independência em autocuidado, alimentação e
-                organização.
+              <p className="text-sm text-white/70 max-w-md">
+                Transformando desafios do cotidiano em conquistas, desenvolvendo
+                habilidades que promovem autonomia e qualidade de vida{" "}
               </p>
             </div>
           </div>
@@ -294,21 +292,24 @@ export function FeatureSection() {
                   : {}
               }
             >
-              Sou Terapeuta Ocupacional com especialização em Integração
-              Sensorial, focada no desenvolvimento infantil de criancas com
-              autismo, TDAH e atrasos no desenvolvimento.
+              Sou Terapeuta Ocupacional com certificação internacional em
+              Integração Sensorial de Ayres (ASI) e apaixonada pelo
+              desenvolvimento infantil. Acompanho crianças e suas famílias
+              sempre com muito acolhimento e cuidado.
             </p>
             <p
-              className={`text-muted-foreground leading-relaxed mb-10 ${isAboutVisible ? "animate-blur-in opacity-0" : "opacity-0"}`}
+              className={`text-lg text-muted-foreground leading-relaxed mb-10 ${isAboutVisible ? "animate-blur-in opacity-0" : "opacity-0"}`}
               style={
                 isAboutVisible
                   ? { animationDelay: "0.8s", animationFillMode: "forwards" }
                   : {}
               }
             >
-              Minha missão é ajudar cada criança a alcançar seu máximo potencial
-              através de intervenções lúdicas, baseadas em evidências e
-              adaptadas as necessidades individuais de cada família.
+              Acredito no poder do brincar: é de forma lúdica que a criança
+              aprende, se regula e conquista autonomia — da alimentação ao
+              desfralde, das primeiras habilidades de escrita à organização da
+              rotina. Cada plano é pensado para a criança e para a sua família,
+              com base em evidências e um olhar atento ao que cada uma precisa.
             </p>
 
             {/* Service Cards */}
