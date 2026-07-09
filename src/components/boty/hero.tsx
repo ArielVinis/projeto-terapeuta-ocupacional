@@ -44,16 +44,16 @@ export function Hero() {
                   animationFillMode: "forwards",
                 }}
               >
-                para seu filho
+                infantil
               </span>
             </h2>
             <p
               className="text-lg leading-relaxed mb-10 max-w-md mx-auto lg:mx-0 text-muted-foreground animate-blur-in opacity-0"
               style={{ animationDelay: "1s", animationFillMode: "forwards" }}
             >
-              Ajudo crianças a alcançarem seu máximo potencial através de
-              intervenções lúdicas e personalizadas para autismo, TDAH e atrasos
-              no desenvolvimento.
+              Acompanho cada criança no seu desenvolvimento com intervenções
+              lúdicas e personalizadas, unindo acolhimento, escuta e cuidado em
+              todas as fases.
             </p>
             <div
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-blur-in opacity-0"

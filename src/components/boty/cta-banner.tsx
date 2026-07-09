@@ -45,11 +45,12 @@ export function CTABanner() {
               Agende sua consulta
             </span>
             <h3 className="text-3xl md:text-4xl lg:text-5xl text-white mb-4 font-serif">
-              Vamos juntos cuidar do desenvolvimento do seu filho
+              Vamos juntos cuidar do desenvolvimento infantil
             </h3>
             <p className="text-lg text-white/80 mb-8 max-w-xl">
-              A primeira avaliação é essencial para entender as necessidades da
-              criança e traçar um plano de intervenção personalizado.
+              Começamos com uma conversa inicial para conhecer as demandas da
+              sua família e avaliar a criança com atenção — a base para um plano
+              de intervenção pensado especialmente para ela.{" "}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start mb-8">
