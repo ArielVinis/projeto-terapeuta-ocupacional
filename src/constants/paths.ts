@@ -2,14 +2,25 @@ export const PATHS = Object.freeze({
   home: "/",
   shop: "/shop",
   product: (id: string) => `/product/${id}`,
+
   login: "/login",
   meusEbooks: "/meus-ebooks",
-  admin: "/admin",
+
+  admin: {
+    root: "/admin",
+    ebooks: "/admin/ebooks",
+    sales: "/admin/sales",
+  },
+
+  api: {
+    auth: "/api/auth",
+    stripeWebhook: "/api/stripe/webhook",
+    ebookDownload: (id: string) => `/api/ebooks/${id}/download`,
+  },
+
   termos: "/termos",
   privacidade: "/privacidade",
-  apiAuth: "/api/auth",
-  apiStripeWebhook: "/api/stripe/webhook",
-  apiEbookDownload: (id: string) => `/api/ebooks/${id}/download`,
+
   hash: Object.freeze({
     sobre: "/#sobre",
     materiais: "/#materiais",

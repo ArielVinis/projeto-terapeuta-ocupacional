@@ -14,4 +14,4 @@ const client = postgres(connectionString ?? "postgresql://localhost:5432/placeho
   max: 1,
 });
 
-export const db = drizzle(client, { schema });
+export const db = drizzle(client, { schema, casing: "snake_case" });

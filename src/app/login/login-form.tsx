@@ -3,6 +3,7 @@
 import { useState, type SubmitEvent } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
+import { Eye, EyeOff } from "lucide-react"
 import { PATHS } from "@/src/constants/paths"
 import { safeCallbackUrl } from "@/src/lib/safe-callback-url"
 import { authClient } from "@/src/server/auth/client"
@@ -10,10 +11,18 @@ import { authClient } from "@/src/server/auth/client"
 export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const callbackUrl = safeCallbackUrl(searchParams.get("callbackUrl"))
+  const rawCallback = searchParams.get("callbackUrl")
+  const callbackUrl = safeCallbackUrl(rawCallback)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [mode, setMode] = useState<"login" | "register">("login")
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  function postLoginPath(user?: { role?: string | null } | null) {
+    if (rawCallback) return callbackUrl
+    return user?.role === "admin" ? PATHS.admin.root : PATHS.meusEbooks
+  }
 
   async function onSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -34,10 +43,11 @@ export function LoginForm() {
         }
         const result = await authClient.signUp.email({ email, password, name })
         if (result.error) {
-          setError(result.error.message ?? "Falha no registo")
+          setError(result.error.message ?? "Falha no cadastro")
           setLoading(false)
           return
         }
+        router.push(postLoginPath(result.data?.user as { role?: string } | undefined))
       } else {
         const result = await authClient.signIn.email({ email, password })
         if (result.error) {
@@ -45,8 +55,8 @@ export function LoginForm() {
           setLoading(false)
           return
         }
+        router.push(postLoginPath(result.data?.user as { role?: string } | undefined))
       }
-      router.push(callbackUrl)
       router.refresh()
     } catch {
       setError("Erro inesperado")
@@ -57,7 +67,9 @@ export function LoginForm() {
   async function signInGoogle() {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: callbackUrl,
+      callbackURL: rawCallback
+        ? callbackUrl
+        : PATHS.meusEbooks,
     })
   }
 
@@ -92,27 +104,61 @@ export function LoginForm() {
         </label>
         <label className="flex flex-col gap-1 text-sm">
           Senha
-          <input
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            autoComplete={mode === "register" ? "new-password" : "current-password"}
-            className="h-11 rounded-xl border border-border bg-background px-3"
-          />
+          <span className="relative block">
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              required
+              minLength={8}
+              autoComplete={
+                mode === "register" ? "new-password" : "current-password"
+              }
+              className="h-11 w-full rounded-xl border border-border bg-background px-3 pr-11"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground"
+              aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+            >
+              {showPassword ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+            </button>
+          </span>
         </label>
 
         {mode === "register" && (
           <label className="flex flex-col gap-1 text-sm">
             Confirmar senha
-            <input
-              name="confirmPassword"
-              type="password"
-              required
-              minLength={8}
-              autoComplete="new-password"
-              className="h-11 rounded-xl border border-border bg-background px-3"
-            />
+            <span className="relative block">
+              <input
+                name="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                required
+                minLength={8}
+                autoComplete="new-password"
+                className="h-11 w-full rounded-xl border border-border bg-background px-3 pr-11"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword((v) => !v)}
+                className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground"
+                aria-label={
+                  showConfirmPassword
+                    ? "Ocultar confirmação de senha"
+                    : "Mostrar confirmação de senha"
+                }
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            </span>
           </label>
         )}
 
@@ -155,7 +201,7 @@ export function LoginForm() {
       </p>
 
       <p className="mt-4 text-xs text-center text-muted-foreground">
-        Ao continuar, aceita os{" "}
+        Ao continuar, você aceita os{" "}
         <Link href={PATHS.termos} className="underline">
           Termos
         </Link>{" "}

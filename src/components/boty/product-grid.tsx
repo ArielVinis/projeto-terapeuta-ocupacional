@@ -6,9 +6,9 @@ import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "./cart-context";
 import { PATHS } from "@/src/constants/paths";
-import { EBOOKS_CATALOG } from "@/src/lib/ebooks-catalog";
+import type { ShopProduct } from "@/src/lib/shop-product";
 
-export function ProductGrid() {
+export function ProductGrid({ products }: { products: ShopProduct[] }) {
   const [isVisible, setIsVisible] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -16,11 +16,11 @@ export function ProductGrid() {
   const { addItem } = useCart();
 
   useEffect(() => {
-    EBOOKS_CATALOG.forEach((product) => {
+    products.forEach((product) => {
       const img = new window.Image();
       img.src = product.image;
     });
-  }, []);
+  }, [products]);
 
   useEffect(() => {
     const gridObserver = new IntersectionObserver(
@@ -84,10 +84,10 @@ export function ProductGrid() {
         </div>
 
         <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {EBOOKS_CATALOG.map((product, index) => (
+          {products.map((product, index) => (
             <Link
               key={product.id}
-              href={PATHS.product(product.id)}
+              href={PATHS.product(product.slug)}
               className={`group transition-all duration-500 ease-out ${
                 isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}
@@ -114,24 +114,26 @@ export function ProductGrid() {
                       {product.badge}
                     </span>
                   )}
-                  <button
-                    type="button"
-                    className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-background/90 backdrop-blur-sm flex items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 vivi-transition vivi-shadow"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      addItem({
-                        id: product.id,
-                        name: product.name,
-                        description: product.description,
-                        price: product.price,
-                        image: product.image,
-                      });
-                    }}
-                    aria-label="Adicionar ao carrinho"
-                  >
-                    <ShoppingBag className="w-4 h-4 text-foreground" />
-                  </button>
+                  {product.purchasable && (
+                    <button
+                      type="button"
+                      className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-background/90 backdrop-blur-sm flex items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 vivi-transition vivi-shadow"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        addItem({
+                          id: product.id,
+                          name: product.name,
+                          description: product.description,
+                          price: product.price,
+                          image: product.image,
+                        });
+                      }}
+                      aria-label="Adicionar ao carrinho"
+                    >
+                      <ShoppingBag className="w-4 h-4 text-foreground" />
+                    </button>
+                  )}
                 </div>
 
                 <div className="p-5">

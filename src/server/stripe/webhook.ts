@@ -1,8 +1,11 @@
 import { createPurchaseFromStripe } from "@/src/server/ebook/mutations";
-import { getEbookByIdOrSlug } from "@/src/server/ebook/queries";
+import { findEbookInDb } from "@/src/server/ebook/queries";
 import type Stripe from "stripe";
 
-export async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+/** Libera e-books só quando o pagamento está confirmado (cartão ou Pix). */
+export async function fulfillCheckoutSession(session: Stripe.Checkout.Session) {
+  if (session.payment_status !== "paid") return;
+
   const userId = session.client_reference_id ?? session.metadata?.userId ?? null;
   if (!userId || !session.id) return;
 
@@ -13,7 +16,7 @@ export async function handleCheckoutCompleted(session: Stripe.Checkout.Session) 
 
   const prices: Record<string, number> = {};
   for (const ebookId of ebookIds) {
-    const row = await getEbookByIdOrSlug(ebookId);
+    const row = await findEbookInDb(ebookId);
     prices[ebookId] = row?.priceCents ?? 0;
   }
 

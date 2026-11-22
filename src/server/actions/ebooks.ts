@@ -3,29 +3,50 @@
 import { PATHS } from "@/src/constants/paths";
 import { env } from "@/src/env";
 import { requireAdmin, requireSession } from "@/src/server/auth/session";
-import { uploadEbookPdf } from "@/src/server/blob";
-import { upsertEbook } from "@/src/server/ebook/mutations";
-import { getEbookByIdOrSlug, userOwnsEbook } from "@/src/server/ebook/queries";
+import { deleteBlobBestEffort, uploadEbookCover, uploadEbookPdf } from "@/src/server/blob";
+import { deleteEbookById, upsertEbook } from "@/src/server/ebook/mutations";
+import { findEbookInDb, userOwnsEbook } from "@/src/server/ebook/queries";
 import { createEbookCheckoutSession } from "@/src/server/stripe/checkout";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import type { ActionResult } from "./result";
 
+const coverUrlSchema = z
+  .string()
+  .max(2048)
+  .refine(
+    (value) => value.startsWith("https://") || /^\/[a-zA-Z0-9/_.-]*$/.test(value),
+    "URL de capa inválida",
+  );
+
 const ebookSchema = z.object({
-  id: z.string().optional(),
+  id: z.uuid().optional(),
   slug: z
     .string()
     .min(2)
+    .max(120)
     .regex(/^[a-z0-9-]+$/, "Slug inválido"),
-  title: z.string().min(2),
-  description: z.string().min(2),
+  title: z.string().min(2).max(200),
+  description: z.string().min(2).max(5000),
   priceReais: z.coerce.number().positive(),
-  coverUrl: z.string().optional().nullable(),
+  coverUrl: z
+    .union([z.null(), z.literal(""), coverUrlSchema])
+    .optional()
+    .nullable()
+    .transform((v) => (v === "" || v == null ? null : v)),
   active: z.coerce.boolean().optional(),
 });
 
+function revalidateEbookPaths() {
+  revalidatePath(PATHS.admin.root);
+  revalidatePath(PATHS.admin.ebooks);
+  revalidatePath(PATHS.admin.sales);
+  revalidatePath(PATHS.shop);
+  revalidatePath(PATHS.home);
+}
+
 export async function saveEbookAction(formData: FormData): Promise<ActionResult<{ id: string }>> {
-  await requireAdmin(PATHS.admin);
+  await requireAdmin(PATHS.admin.ebooks);
 
   const parsed = ebookSchema.safeParse({
     id: formData.get("id") || undefined,
@@ -34,28 +55,57 @@ export async function saveEbookAction(formData: FormData): Promise<ActionResult<
     description: formData.get("description"),
     priceReais: formData.get("priceReais"),
     coverUrl: formData.get("coverUrl") || null,
-    active: formData.get("active") !== "false",
+    active: formData.get("active") === "true" || formData.get("active") === "on",
   });
 
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
   }
 
+  const existing = parsed.data.id ? await findEbookInDb(parsed.data.id) : null;
+
+  let coverUrl = parsed.data.coverUrl ?? null;
+  const coverFile = formData.get("cover");
+  let replacedCover = false;
+  if (coverFile instanceof File && coverFile.size > 0) {
+    const isImage =
+      coverFile.type.startsWith("image/") || /\.(jpe?g|png|webp|gif|avif)$/i.test(coverFile.name);
+    if (!isImage) {
+      return { success: false, error: "A capa deve ser uma imagem" };
+    }
+    try {
+      const uploaded = await uploadEbookCover(coverFile);
+      coverUrl = uploaded.url;
+      replacedCover = true;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Falha no upload da capa",
+      };
+    }
+  } else if (parsed.data.id && !coverUrl) {
+    coverUrl = existing?.coverUrl ?? null;
+  }
+
   let blobPath: string | null | undefined;
+  let replacedPdf = false;
   const file = formData.get("pdf");
   if (file instanceof File && file.size > 0) {
-    const maxBytes = 20 * 1024 * 1024;
     const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
     if (!isPdf) {
-      return { success: false, error: "Apenas ficheiros PDF são permitidos" };
+      return { success: false, error: "Apenas arquivos PDF são permitidos" };
     }
-    if (file.size > maxBytes) {
-      return { success: false, error: "PDF demasiado grande (máx. 20 MB)" };
+    try {
+      const uploaded = await uploadEbookPdf(file.name, file);
+      blobPath = uploaded.url;
+      replacedPdf = true;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Falha no upload do PDF",
+      };
     }
-    const uploaded = await uploadEbookPdf(file.name, file);
-    blobPath = uploaded.url;
   } else if (parsed.data.id) {
-    const existing = await getEbookByIdOrSlug(parsed.data.id);
     blobPath = existing?.blobPath ?? null;
   }
 
@@ -65,30 +115,74 @@ export async function saveEbookAction(formData: FormData): Promise<ActionResult<
     title: parsed.data.title,
     description: parsed.data.description,
     priceCents: Math.round(parsed.data.priceReais * 100),
-    coverUrl: parsed.data.coverUrl,
+    coverUrl,
     blobPath,
     active: parsed.data.active ?? true,
   });
 
-  revalidatePath(PATHS.admin);
-  revalidatePath(PATHS.shop);
-  revalidatePath(PATHS.home);
+  if (replacedCover) {
+    await deleteBlobBestEffort(existing?.coverUrl);
+  }
+  if (replacedPdf) {
+    await deleteBlobBestEffort(existing?.blobPath);
+  }
+
+  revalidateEbookPaths();
   return { success: true, data: { id } };
 }
+
+export async function deleteEbookAction(id: string): Promise<ActionResult> {
+  await requireAdmin(PATHS.admin.ebooks);
+
+  if (!z.uuid().safeParse(id).success) {
+    return { success: false, error: "E-book inválido" };
+  }
+
+  try {
+    const deleted = await deleteEbookById(id);
+    if (!deleted) {
+      return { success: false, error: "E-book não encontrado" };
+    }
+
+    await deleteBlobBestEffort(deleted.coverUrl);
+    await deleteBlobBestEffort(deleted.blobPath);
+
+    revalidateEbookPaths();
+    revalidatePath(PATHS.meusEbooks);
+    return { success: true, data: undefined };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Falha ao excluir e-book",
+    };
+  }
+}
+
+const checkoutIdsSchema = z.array(z.string().min(1).max(120)).min(1).max(20);
 
 export async function startCheckoutAction(
   ebookIds: string[],
 ): Promise<ActionResult<{ url: string }>> {
   const session = await requireSession(PATHS.shop);
-  if (!ebookIds.length) {
-    return { success: false, error: "Carrinho vazio" };
+  const idsParsed = checkoutIdsSchema.safeParse(ebookIds);
+  if (!idsParsed.success) {
+    return { success: false, error: "Carrinho inválido" };
   }
 
   const items = [];
-  for (const id of ebookIds) {
-    const row = await getEbookByIdOrSlug(id);
-    if (!row || row.active === false) {
-      return { success: false, error: `E-book não encontrado: ${id}` };
+  for (const id of idsParsed.data) {
+    const row = await findEbookInDb(id);
+    if (!row || !row.active) {
+      return {
+        success: false,
+        error: "Um ou mais e-books do carrinho não estão disponíveis para compra",
+      };
+    }
+    if (!z.uuid().safeParse(row.id).success) {
+      return {
+        success: false,
+        error: "Um ou mais e-books do carrinho não estão disponíveis para compra",
+      };
     }
     items.push({
       id: row.id,
@@ -123,16 +217,18 @@ export async function getDownloadUrlAction(
   ebookId: string,
 ): Promise<ActionResult<{ url: string }>> {
   const session = await requireSession(PATHS.meusEbooks);
+  if (!z.uuid().safeParse(ebookId).success) {
+    return { success: false, error: "E-book inválido" };
+  }
   const owns = await userOwnsEbook(session.user.id, ebookId);
   if (!owns) {
     return { success: false, error: "Sem permissão para este e-book" };
   }
 
-  const row = await getEbookByIdOrSlug(ebookId);
+  const row = await findEbookInDb(ebookId);
   if (!row?.blobPath) {
-    return { success: false, error: "Ficheiro ainda não disponível" };
+    return { success: false, error: "Arquivo ainda não disponível" };
   }
 
-  // Private blobs are streamed via authenticated API route (not a public URL).
-  return { success: true, data: { url: PATHS.apiEbookDownload(row.id) } };
+  return { success: true, data: { url: PATHS.api.ebookDownload(row.id) } };
 }

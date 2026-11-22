@@ -12,7 +12,7 @@ export async function createEbookCheckoutSession(input: {
     mode: "payment",
     customer_email: input.userEmail,
     client_reference_id: input.userId,
-    payment_method_types: ["card", "pix"],
+    allowed_payment_method_types: ["card", "pix"],
     line_items: input.items.map((item) => ({
       quantity: 1,
       price_data: {

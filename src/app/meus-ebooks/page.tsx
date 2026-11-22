@@ -1,6 +1,16 @@
 import Image from "next/image"
 import Link from "next/link"
+import { BookOpenIcon } from "lucide-react"
 import { PATHS } from "@/src/constants/paths"
+import { Button } from "@/src/components/ui/button"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/src/components/ui/empty"
 import { requireSession } from "@/src/server/auth/session"
 import { listUserEntitlements } from "@/src/server/ebook/queries"
 import { DownloadButton } from "./download-button"
@@ -26,26 +36,32 @@ export default async function MeusEbooksPage({
         <div>
           <h1 className="font-serif text-4xl mb-2">Meus e-books</h1>
           <p className="text-muted-foreground">
-            Olá, {session.user.name}. Os teus downloads aparecem aqui após o
+            Olá, {session.user.name}. Seus downloads aparecem aqui após o
             pagamento.
           </p>
           {params.checkout === "success" && (
             <p className="mt-3 text-sm text-primary">
-              Pagamento recebido. Se o e-book ainda não aparecer, aguarda uns
-              segundos e atualiza a página.
+              Pagamento recebido. Se o e-book ainda não aparecer, aguarde alguns
+              segundos e atualize a página.
             </p>
           )}
         </div>
 
         {items.length === 0 ? (
-          <div className="rounded-2xl border border-border p-8 text-center">
-            <p className="text-muted-foreground mb-4">
-              Ainda não tens e-books comprados.
-            </p>
-            <Link href={PATHS.shop} className="text-primary hover:underline">
-              Ir à loja
-            </Link>
-          </div>
+          <Empty className="border border-dashed border-border">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <BookOpenIcon />
+              </EmptyMedia>
+              <EmptyTitle>Ainda sem e-books</EmptyTitle>
+              <EmptyDescription>
+                Seus downloads aparecem aqui depois do pagamento.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button render={<Link href={PATHS.shop} />}>Ir para a loja</Button>
+            </EmptyContent>
+          </Empty>
         ) : (
           <ul className="flex flex-col gap-4">
             {items.map((item) => (
