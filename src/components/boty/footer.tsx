@@ -1,31 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import {
-  IconBrandInstagram,
-  IconBrandWhatsapp,
-  IconMail,
-  IconMapPin,
-} from "@tabler/icons-react";
-
-const iconProps = { size: 16, stroke: 1.5, className: "size-4" };
+import { Instagram, Mail, MapPin, MessageCircle } from "lucide-react";
+import { PATHS } from "@/src/constants/paths";
 
 const footerLinks = {
   servicos: [
-    { name: "Avaliação Inicial", href: "/#servicos" },
-    { name: "Terapia Individual", href: "/#servicos" },
-    { name: "Orientação Familiar", href: "/#servicos" },
+    { name: "Avaliação Inicial", href: PATHS.hash.servicos },
+    { name: "Terapia Individual", href: PATHS.hash.servicos },
+    { name: "Orientação Familiar", href: PATHS.hash.servicos },
   ],
   sobre: [
-    { name: "Sobre Mim", href: "/#sobre" },
-    { name: "Abordagem", href: "/#sobre" },
-    // { name: "Depoimentos", href: "/#depoimentos" },
-    { name: "Materiais", href: "/shop" },
+    { name: "Sobre Mim", href: PATHS.hash.sobre },
+    { name: "Abordagem", href: PATHS.hash.sobre },
+    { name: "Materiais", href: PATHS.shop },
   ],
   contato: [
-    { name: "Agendar Consulta", href: "/#agendar" },
+    { name: "Agendar Consulta", href: PATHS.hash.agendar },
     { name: "WhatsApp", href: "https://wa.me/555596867402" },
-    { name: "Localização", href: "/#contato" },
+    { name: "Localização", href: PATHS.hash.agendar },
   ],
 };
 
@@ -61,14 +54,14 @@ export function Footer() {
                 className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-primary/10 vivi-transition vivi-shadow"
                 aria-label="Instagram"
               >
-                <IconBrandInstagram {...iconProps} />
+                <Instagram className="size-4" />
               </a>
               <a
                 href="mailto:tovitoriamoreira@gmail.com"
                 className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-primary/10 vivi-transition vivi-shadow"
                 aria-label="Email"
               >
-                <IconMail {...iconProps} />
+                <Mail className="size-4" />
               </a>
               <a
                 href="https://wa.me/555596867402"
@@ -77,7 +70,7 @@ export function Footer() {
                 className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-primary/10 vivi-transition vivi-shadow"
                 aria-label="WhatsApp"
               >
-                <IconBrandWhatsapp {...iconProps} />
+                <MessageCircle className="size-4" />
               </a>
             </div>
           </div>
@@ -132,7 +125,7 @@ export function Footer() {
               ))}
             </ul>
             <div className="mt-6 flex items-start gap-2 text-sm text-muted-foreground">
-              <IconMapPin {...iconProps} className="mt-0.5 shrink-0 size-4" />
+              <MapPin className="mt-0.5 shrink-0 size-4" />
               <span>Atendimento presencial e on-line</span>
             </div>
           </div>
@@ -147,13 +140,13 @@ export function Footer() {
             </p>
             <div className="flex gap-6">
               <Link
-                href="/"
+                href={PATHS.privacidade}
                 className="text-sm text-muted-foreground hover:text-primary vivi-transition"
               >
                 Política de Privacidade
               </Link>
               <Link
-                href="/"
+                href={PATHS.termos}
                 className="text-sm text-muted-foreground hover:text-primary vivi-transition"
               >
                 Termos de Uso

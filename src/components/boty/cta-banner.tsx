@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Clock, Phone, ArrowRight } from "lucide-react";
+import { ASSETS } from "@/src/constants/assets";
 
 export function CTABanner() {
   const [isVisible, setIsVisible] = useState(false);
@@ -19,13 +20,14 @@ export function CTABanner() {
       { threshold: 0.1 },
     );
 
-    if (bannerRef.current) {
-      observer.observe(bannerRef.current);
+    const node = bannerRef.current;
+    if (node) {
+      observer.observe(node);
     }
 
     return () => {
-      if (bannerRef.current) {
-        observer.unobserve(bannerRef.current);
+      if (node) {
+        observer.unobserve(node);
       }
     };
   }, []);
@@ -80,10 +82,10 @@ export function CTABanner() {
           {/* Image */}
           <div className="relative w-full lg:w-80 aspect-square rounded-2xl overflow-hidden shrink-0">
             <Image
-              src="/images/therapy-play.jpg"
+              src={ASSETS.cta}
               alt="Sessão de terapia ocupacional"
               fill
-              className="object-cover"
+              className="object-cover object-[center_60%]"
             />
           </div>
 

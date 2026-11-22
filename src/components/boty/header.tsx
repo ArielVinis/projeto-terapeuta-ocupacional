@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ShoppingBag, Calendar } from "lucide-react";
+import { PATHS } from "@/src/constants/paths";
 import { CartDrawer } from "./cart-drawer";
 import { useCart } from "./cart-context";
 
@@ -34,25 +35,25 @@ export function Header() {
           {/* Desktop Navigation - Left */}
           <div className="hidden lg:flex items-center gap-8">
             <Link
-              href="/"
+              href={PATHS.home}
               className="text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
             >
               Inicio
             </Link>
             <Link
-              href="/#sobre"
+              href={PATHS.hash.sobre}
               className="text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
             >
               Sobre
             </Link>
             <Link
-              href="/#materiais"
+              href={PATHS.hash.materiais}
               className="text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
             >
               Materiais
             </Link>
             <Link
-              href="/#servicos"
+              href={PATHS.hash.servicos}
               className="text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
             >
               Serviços
@@ -60,7 +61,7 @@ export function Header() {
           </div>
 
           {/* Logo */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2">
+          <Link href={PATHS.home} className="absolute left-1/2 -translate-x-1/2">
             <h1 className="font-serif text-2xl tracking-wide text-foreground">
               <span className="text-primary">Vitoria</span> Vizzotto
             </h1>
@@ -69,7 +70,13 @@ export function Header() {
           {/* Right Actions */}
           <div className="flex items-center gap-4">
             <Link
-              href="/#agendar"
+              href={PATHS.login}
+              className="hidden sm:inline text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
+            >
+              Entrar
+            </Link>
+            <Link
+              href={PATHS.hash.agendar}
               className="hidden sm:flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm vivi-transition hover:bg-primary/90"
             >
               <Calendar className="w-4 h-4" />
@@ -101,35 +108,35 @@ export function Header() {
         >
           <div className="flex flex-col gap-4 pt-4 border-t border-border/50">
             <Link
-              href="/"
+              href={PATHS.home}
               className="text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
               onClick={() => setIsMenuOpen(false)}
             >
               Inicio
             </Link>
             <Link
-              href="/#sobre"
+              href={PATHS.hash.sobre}
               className="text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
               onClick={() => setIsMenuOpen(false)}
             >
               Sobre
             </Link>
             <Link
-              href="/#materiais"
+              href={PATHS.hash.materiais}
               className="text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
               onClick={() => setIsMenuOpen(false)}
             >
               Materiais
             </Link>
             <Link
-              href="/#servicos"
+              href={PATHS.hash.servicos}
               className="text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
               onClick={() => setIsMenuOpen(false)}
             >
               Serviços
             </Link>
             <Link
-              href="/#agendar"
+              href={PATHS.hash.agendar}
               className="text-sm tracking-wide text-primary font-medium vivi-transition"
               onClick={() => setIsMenuOpen(false)}
             >
