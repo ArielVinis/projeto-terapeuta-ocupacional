@@ -46,6 +46,8 @@ export function ProductGrid({ products }: { products: ShopProduct[] }) {
     };
   }, []);
 
+  if (products.length === 0) return null;
+
   return (
     <section id="materiais" className="py-24 bg-card">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">

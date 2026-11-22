@@ -15,7 +15,7 @@ export default async function HomePage() {
       <Header />
       <Hero />
       <TrustBadges />
-      <ProductGrid products={products} />
+      {products.length > 0 ? <ProductGrid products={products} /> : null}
       <AboutMe />
       <CTABanner />
       <Footer />

@@ -1,4 +1,3 @@
-import { EBOOKS_CATALOG } from "@/src/lib/ebooks-catalog";
 import type { ShopProduct } from "@/src/lib/shop-product";
 import { db } from "@/src/server/db";
 import { ebook, purchase, purchaseItem } from "@/src/server/db/schema";
@@ -27,35 +26,22 @@ export async function listActiveEbooks(): Promise<ShopProduct[]> {
       .from(ebook)
       .where(eq(ebook.active, true))
       .orderBy(desc(ebook.createdAt));
-    if (rows.length > 0) {
-      return rows.map((row) => ({
-        id: row.id,
-        slug: row.slug,
-        name: row.title,
-        description: row.description,
-        price: Math.round(row.priceCents / 100),
-        priceCents: row.priceCents,
-        originalPrice: null,
-        image: row.coverUrl ?? "/placeholder.svg",
-        badge: null,
-        purchasable: true,
-      }));
-    }
+
+    return rows.map((row) => ({
+      id: row.id,
+      slug: row.slug,
+      name: row.title,
+      description: row.description,
+      price: Math.round(row.priceCents / 100),
+      priceCents: row.priceCents,
+      originalPrice: null,
+      image: row.coverUrl ?? "/placeholder.svg",
+      badge: null,
+      purchasable: true,
+    }));
   } catch {
-    // DB indisponível → fallback estático
+    return [];
   }
-  return EBOOKS_CATALOG.map((item) => ({
-    id: item.id,
-    slug: item.slug,
-    name: item.name,
-    description: item.description,
-    price: item.price,
-    priceCents: item.price * 100,
-    originalPrice: item.originalPrice,
-    image: item.image,
-    badge: item.badge,
-    purchasable: false,
-  }));
 }
 
 export async function listAllEbooksAdmin() {
@@ -67,23 +53,9 @@ export async function getEbookByIdOrSlug(idOrSlug: string) {
     const row = await findEbookInDb(idOrSlug);
     if (row) return { ...row, purchasable: true as const };
   } catch {
-    // fallback
+    // DB indisponível
   }
-
-  const fallback = EBOOKS_CATALOG.find((item) => item.id === idOrSlug || item.slug === idOrSlug);
-  if (!fallback) return null;
-
-  return {
-    id: fallback.id,
-    slug: fallback.slug,
-    title: fallback.name,
-    description: fallback.description,
-    priceCents: fallback.price * 100,
-    coverUrl: fallback.image,
-    blobPath: null as string | null,
-    active: true,
-    purchasable: false as const,
-  };
+  return null;
 }
 
 export async function listUserEntitlements(userId: string) {
