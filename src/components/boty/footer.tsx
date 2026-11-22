@@ -1,8 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { Instagram, Mail, MapPin, MessageCircle } from "lucide-react";
+import { Mail, MapPin, MessageCircle } from "lucide-react";
 import { PATHS } from "@/src/constants/paths";
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
 
 const footerLinks = {
   servicos: [
@@ -54,7 +73,7 @@ export function Footer() {
                 className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-primary/10 vivi-transition vivi-shadow"
                 aria-label="Instagram"
               >
-                <Instagram className="size-4" />
+                <InstagramIcon className="size-4" />
               </a>
               <a
                 href="mailto:tovitoriamoreira@gmail.com"

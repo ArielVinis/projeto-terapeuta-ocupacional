@@ -7,7 +7,7 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const sessionCookie = getSessionCookie(request);
 
-  const needsAuth = pathname.startsWith(PATHS.meusEbooks) || pathname.startsWith(PATHS.admin);
+  const needsAuth = pathname.startsWith(PATHS.meusEbooks) || pathname.startsWith(PATHS.admin.root);
 
   if (needsAuth && !sessionCookie) {
     const url = request.nextUrl.clone();

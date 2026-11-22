@@ -18,14 +18,18 @@ export async function requireSession(callbackUrl: string = PATHS.meusEbooks) {
   return session;
 }
 
-function isAdminUser(session: NonNullable<Awaited<ReturnType<typeof getSession>>>) {
+export function isAdminUser(session: NonNullable<Awaited<ReturnType<typeof getSession>>>) {
   const role = (session.user as { role?: string }).role ?? "user";
   if (role === "admin") return true;
   if (env.ADMIN_EMAIL && session.user.email === env.ADMIN_EMAIL) return true;
   return false;
 }
 
-export async function requireAdmin(callbackUrl: string = PATHS.admin) {
+export function loggedInHomePath(session: NonNullable<Awaited<ReturnType<typeof getSession>>>) {
+  return isAdminUser(session) ? PATHS.admin.root : PATHS.meusEbooks;
+}
+
+export async function requireAdmin(callbackUrl: string = PATHS.admin.root) {
   const session = await requireSession(callbackUrl);
   if (!isAdminUser(session)) {
     redirect(PATHS.home);

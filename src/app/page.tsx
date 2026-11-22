@@ -3,22 +3,21 @@ import { Hero } from "@/src/components/boty/hero";
 import { TrustBadges } from "@/src/components/boty/trust-badges";
 import { AboutMe } from "@/src/components/boty/about-me";
 import { ProductGrid } from "@/src/components/boty/product-grid";
-import { Testimonials } from "@/src/components/boty/testimonials";
 import { CTABanner } from "@/src/components/boty/cta-banner";
-import { Newsletter } from "@/src/components/boty/newsletter";
 import { Footer } from "@/src/components/boty/footer";
+import { listActiveEbooks } from "@/src/server/ebook/queries";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const products = await listActiveEbooks();
+
   return (
     <main>
       <Header />
       <Hero />
       <TrustBadges />
-      <ProductGrid />
+      <ProductGrid products={products} />
       <AboutMe />
-      {/* <Testimonials /> */}
       <CTABanner />
-      {/* <Newsletter /> */}
       <Footer />
     </main>
   );

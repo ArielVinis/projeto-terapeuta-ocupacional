@@ -14,13 +14,14 @@ export default function TermosPage() {
         </p>
         <div className="flex flex-col gap-4 text-foreground/90 leading-relaxed">
           <p>
-            Estes Termos regulam a utilização do site e a compra de e-books
-            digitais oferecidos por Vitoria Vizzotto Moreira.
+            Estes Termos regulam o uso do site e a compra de e-books digitais
+            oferecidos por Vitoria Vizzotto Moreira.
           </p>
           <h2 className="font-serif text-2xl mt-4">1. Conta</h2>
           <p>
-            Para concluir uma compra é necessário criar conta (e-mail/senha ou
-            Google). És responsável por manter as credenciais em segurança.
+            Para concluir uma compra é necessário criar uma conta (e-mail/senha
+            ou Google). Você é responsável por manter as credenciais em
+            segurança.
           </p>
           <h2 className="font-serif text-2xl mt-4">2. Produtos digitais</h2>
           <p>
@@ -35,9 +36,9 @@ export default function TermosPage() {
           <h2 className="font-serif text-2xl mt-4">4. Licença de uso</h2>
           <p>
             O e-book é licenciado para uso pessoal. É proibida a redistribuição,
-            revenda ou partilha pública do ficheiro.
+            revenda ou compartilhamento público do arquivo.
           </p>
-          <h2 className="font-serif text-2xl mt-4">5. Contacto</h2>
+          <h2 className="font-serif text-2xl mt-4">5. Contato</h2>
           <p>
             Dúvidas:{" "}
             <a href="mailto:tovitoriamoreira@gmail.com" className="text-primary">
@@ -46,7 +47,7 @@ export default function TermosPage() {
             .
           </p>
           <p>
-            Ver também a{" "}
+            Veja também a{" "}
             <Link href={PATHS.privacidade} className="text-primary underline">
               Política de Privacidade
             </Link>

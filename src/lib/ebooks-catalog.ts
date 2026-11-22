@@ -9,7 +9,7 @@ export type EbookCatalogItem = {
   badge: string | null;
 };
 
-/** Catálogo estático de fallback (loja pública até o admin/DB estar populado). */
+/** Catálogo estático de fallback (vitrine quando a DB está vazia — não vendável). */
 export const EBOOKS_CATALOG: EbookCatalogItem[] = [
   {
     id: "ebook-integracao-sensorial",
@@ -52,7 +52,3 @@ export const EBOOKS_CATALOG: EbookCatalogItem[] = [
     badge: "Promocao",
   },
 ];
-
-export function getEbookById(id: string) {
-  return EBOOKS_CATALOG.find((item) => item.id === id || item.slug === id);
-}

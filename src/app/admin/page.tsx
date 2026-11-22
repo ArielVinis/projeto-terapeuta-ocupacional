@@ -1,64 +1,86 @@
 import { PATHS } from "@/src/constants/paths"
-import { requireAdmin } from "@/src/server/auth/session"
-import { listAllEbooksAdmin } from "@/src/server/ebook/queries"
-import { AdminEbookForm } from "./admin-ebook-form"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card"
+import { getSalesStats, parseAdminPeriod } from "@/src/server/admin/stats"
+import { PeriodFilter } from "./period-filter"
+import { SalesChart } from "./sales-chart"
 
-export default async function AdminPage() {
-  await requireAdmin(PATHS.admin)
-  let ebooks: Awaited<ReturnType<typeof listAllEbooksAdmin>> = []
+function formatBrl(cents: number) {
+  return (cents / 100).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  })
+}
+
+export default async function AdminDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ period?: string }>
+}) {
+  const params = await searchParams
+  const period = parseAdminPeriod(params.period)
+
+  let stats = {
+    revenueCents: 0,
+    salesCount: 0,
+    averageTicketCents: 0,
+    series: [] as Awaited<ReturnType<typeof getSalesStats>>["series"],
+  }
   try {
-    ebooks = await listAllEbooksAdmin()
+    stats = await getSalesStats(period)
   } catch {
-    ebooks = []
+    // DB offline
   }
 
   return (
-    <main className="min-h-screen bg-background px-6 py-16">
-      <div className="max-w-4xl mx-auto flex flex-col gap-10">
+    <>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-serif text-4xl mb-2">Admin · E-books</h1>
+          <h1 className="font-serif text-3xl mb-2">Dashboard</h1>
           <p className="text-muted-foreground">
-            Criar e atualizar e-books e PDFs (Vercel Blob).
+            Acompanhe as vendas dos e-books por período.
           </p>
         </div>
-
-        <AdminEbookForm />
-
-        <section className="flex flex-col gap-4">
-          <h2 className="font-serif text-2xl">Existentes</h2>
-          {ebooks.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Nenhum e-book na base ainda (ou DB offline).
-            </p>
-          ) : (
-            <ul className="flex flex-col gap-3">
-              {ebooks.map((item) => (
-                <li
-                  key={item.id}
-                  className="rounded-xl border border-border p-4 flex flex-col gap-1"
-                >
-                  <span className="font-medium">{item.title}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {item.slug} · R$ {(item.priceCents / 100).toFixed(2)} ·{" "}
-                    {item.active ? "ativo" : "inativo"}
-                  </span>
-                  <AdminEbookForm
-                    initial={{
-                      id: item.id,
-                      slug: item.slug,
-                      title: item.title,
-                      description: item.description,
-                      priceReais: (item.priceCents / 100).toString(),
-                      coverUrl: item.coverUrl ?? "",
-                      active: item.active,
-                    }}
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        <PeriodFilter basePath={PATHS.admin.root} period={period} />
       </div>
-    </main>
+
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Card>
+          <CardHeader>
+            <CardDescription>Receita</CardDescription>
+            <CardTitle className="text-2xl">{formatBrl(stats.revenueCents)}</CardTitle>
+          </CardHeader>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardDescription>Vendas</CardDescription>
+            <CardTitle className="text-2xl">{stats.salesCount}</CardTitle>
+          </CardHeader>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardDescription>Ticket médio</CardDescription>
+            <CardTitle className="text-2xl">
+              {formatBrl(stats.averageTicketCents)}
+            </CardTitle>
+          </CardHeader>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Receita diária</CardTitle>
+          <CardDescription>Últimos {period} dias</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <SalesChart series={stats.series} />
+        </CardContent>
+      </Card>
+    </>
   )
 }

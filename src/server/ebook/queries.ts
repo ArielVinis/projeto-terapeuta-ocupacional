@@ -1,9 +1,26 @@
 import { EBOOKS_CATALOG } from "@/src/lib/ebooks-catalog";
+import type { ShopProduct } from "@/src/lib/shop-product";
 import { db } from "@/src/server/db";
 import { ebook, purchase, purchaseItem } from "@/src/server/db/schema";
 import { and, desc, eq } from "drizzle-orm";
+import { z } from "zod";
 
-export async function listActiveEbooks() {
+const uuidSchema = z.uuid();
+
+/** Só DB — usado por checkout, webhook e ownership. */
+export async function findEbookInDb(idOrSlug: string) {
+  const [bySlug] = await db.select().from(ebook).where(eq(ebook.slug, idOrSlug)).limit(1);
+  if (bySlug) return bySlug;
+
+  if (uuidSchema.safeParse(idOrSlug).success) {
+    const [byId] = await db.select().from(ebook).where(eq(ebook.id, idOrSlug)).limit(1);
+    if (byId) return byId;
+  }
+
+  return null;
+}
+
+export async function listActiveEbooks(): Promise<ShopProduct[]> {
   try {
     const rows = await db
       .select()
@@ -18,19 +35,26 @@ export async function listActiveEbooks() {
         description: row.description,
         price: Math.round(row.priceCents / 100),
         priceCents: row.priceCents,
-        originalPrice: null as number | null,
+        originalPrice: null,
         image: row.coverUrl ?? "/placeholder.svg",
-        badge: null as string | null,
-        blobPath: row.blobPath,
+        badge: null,
+        purchasable: true,
       }));
     }
   } catch {
     // DB indisponível → fallback estático
   }
   return EBOOKS_CATALOG.map((item) => ({
-    ...item,
+    id: item.id,
+    slug: item.slug,
+    name: item.name,
+    description: item.description,
+    price: item.price,
     priceCents: item.price * 100,
-    blobPath: null as string | null,
+    originalPrice: item.originalPrice,
+    image: item.image,
+    badge: item.badge,
+    purchasable: false,
   }));
 }
 
@@ -40,11 +64,8 @@ export async function listAllEbooksAdmin() {
 
 export async function getEbookByIdOrSlug(idOrSlug: string) {
   try {
-    const [bySlug] = await db.select().from(ebook).where(eq(ebook.slug, idOrSlug)).limit(1);
-    if (bySlug) return bySlug;
-
-    const [byId] = await db.select().from(ebook).where(eq(ebook.id, idOrSlug)).limit(1);
-    if (byId) return byId;
+    const row = await findEbookInDb(idOrSlug);
+    if (row) return { ...row, purchasable: true as const };
   } catch {
     // fallback
   }
@@ -61,6 +82,7 @@ export async function getEbookByIdOrSlug(idOrSlug: string) {
     coverUrl: fallback.image,
     blobPath: null as string | null,
     active: true,
+    purchasable: false as const,
   };
 }
 

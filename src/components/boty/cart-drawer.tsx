@@ -12,6 +12,8 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/src/components/ui/drawer";
+import { Button } from "@/src/components/ui/button";
+import { Spinner } from "@/src/components/ui/spinner";
 import { startCheckoutAction } from "@/src/server/actions/ebooks";
 import { useCart } from "./cart-context";
 
@@ -102,10 +104,11 @@ export function CartDrawer() {
               <span>R$ {total}</span>
             </div>
 
-            <button
+            <Button
               type="button"
+              size="lg"
               disabled={pending}
-              className="w-full bg-primary text-primary-foreground py-4 rounded-full font-medium hover:bg-primary/90 vivi-transition disabled:opacity-60"
+              className="w-full rounded-full py-4 font-medium"
               onClick={() => {
                 startTransition(async () => {
                   try {
@@ -123,8 +126,9 @@ export function CartDrawer() {
                 })
               }}
             >
+              {pending ? <Spinner data-icon="inline-start" /> : null}
               {pending ? "A redirecionar..." : "Finalizar Compra"}
-            </button>
+            </Button>
 
             <DrawerClose
               render={

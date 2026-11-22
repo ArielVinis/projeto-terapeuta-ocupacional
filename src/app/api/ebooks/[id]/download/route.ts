@@ -1,9 +1,10 @@
 import { PATHS } from "@/src/constants/paths";
 import { env } from "@/src/env";
 import { getSession } from "@/src/server/auth/session";
-import { getEbookByIdOrSlug, userOwnsEbook } from "@/src/server/ebook/queries";
+import { findEbookInDb, userOwnsEbook } from "@/src/server/ebook/queries";
 import { get } from "@vercel/blob";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 export const runtime = "nodejs";
 
@@ -16,14 +17,17 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   }
 
   const { id } = await params;
+  if (!z.uuid().safeParse(id).success) {
+    return NextResponse.json({ error: "E-book inválido" }, { status: 400 });
+  }
   const owns = await userOwnsEbook(session.user.id, id);
   if (!owns) {
     return NextResponse.json({ error: "Sem permissão" }, { status: 403 });
   }
 
-  const row = await getEbookByIdOrSlug(id);
+  const row = await findEbookInDb(id);
   if (!row?.blobPath) {
-    return NextResponse.json({ error: "Ficheiro indisponível" }, { status: 404 });
+    return NextResponse.json({ error: "Arquivo indisponível" }, { status: 404 });
   }
 
   if (!env.BLOB_READ_WRITE_TOKEN) {
@@ -36,7 +40,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   });
 
   if (!result || result.statusCode !== 200 || !result.stream) {
-    return NextResponse.json({ error: "Ficheiro não encontrado" }, { status: 404 });
+    return NextResponse.json({ error: "Arquivo não encontrado" }, { status: 404 });
   }
 
   const filename = `${row.slug || id}.pdf`;
