@@ -10,6 +10,7 @@ import {
   GraduationCap,
   Heart,
 } from "lucide-react";
+import { ASSETS } from "@/src/constants/assets";
 
 const services = [
   {
@@ -148,7 +149,7 @@ export function AboutMe() {
             style={{ transitionDelay: "0ms" }}
           >
             <Image
-              src="/images/therapy-sensory.jpg"
+              src={ASSETS.servicos1}
               alt="Ambiente de terapia sensorial"
               fill
               className="object-cover"
@@ -181,7 +182,7 @@ export function AboutMe() {
           >
             {/* Background Image */}
             <Image
-              src="/images/therapy-motor.jpg"
+              src={ASSETS.servicos2}
               alt="Desenvolvimento motor"
               fill
               className="object-cover"
@@ -212,11 +213,18 @@ export function AboutMe() {
 
           {/* Bottom Right - AVDs */}
           <div
-            className={`rounded-3xl p-6 md:p-8 flex flex-col justify-center relative overflow-hidden md:col-span-2 bg-primary transition-all duration-700 ease-out ${
+            className={`rounded-3xl p-6 md:p-8 flex flex-col justify-center relative overflow-hidden md:col-span-2 transition-all duration-700 ease-out ${
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
             style={{ transitionDelay: "200ms" }}
           >
+            <Image
+              src={ASSETS.servicos3}
+              alt="Atividades de vida diária"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-primary/80" />
             <div className="relative z-10 flex flex-col justify-center h-full text-left items-start">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/20 mb-4">
                 <GraduationCap className="w-6 h-6 text-white" />
@@ -248,7 +256,7 @@ export function AboutMe() {
             }`}
           >
             <Image
-              src="/images/vitoria-portrait.jpg"
+              src={ASSETS.aboutMe}
               alt="Vitoria Vizzotto Moreira"
               fill
               className="object-cover"

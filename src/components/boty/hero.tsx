@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Heart, Star, Sparkles } from "lucide-react";
+import { ASSETS } from "@/src/constants/assets";
+import { PATHS } from "@/src/constants/paths";
 
 export function Hero() {
   return (
@@ -60,14 +62,14 @@ export function Hero() {
               style={{ animationDelay: "1.2s", animationFillMode: "forwards" }}
             >
               <Link
-                href="/#agendar"
+                href={PATHS.hash.agendar}
                 className="group inline-flex items-center justify-center gap-3 bg-primary text-primary-foreground px-8 py-4 rounded-full text-sm tracking-wide vivi-transition hover:bg-primary/90 vivi-shadow"
               >
                 Agendar Consulta
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 vivi-transition" />
               </Link>
               <Link
-                href="/#sobre"
+                href={PATHS.hash.sobre}
                 className="inline-flex items-center justify-center gap-2 border border-foreground/20 text-foreground px-8 py-4 rounded-full text-sm tracking-wide vivi-transition hover:bg-foreground/5"
               >
                 Conhecer mais
@@ -105,7 +107,7 @@ export function Hero() {
           >
             <div className="relative aspect-4/5 rounded-3xl overflow-hidden vivi-shadow">
               <Image
-                src="/images/hero-therapy.jpg"
+                src={ASSETS.hero}
                 alt="Vitoria Vizzotto Moreira - Terapeuta Ocupacional"
                 fill
                 className="object-cover"

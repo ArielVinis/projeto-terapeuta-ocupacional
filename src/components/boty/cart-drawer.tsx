@@ -1,6 +1,7 @@
 "use client";
 
-import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { useTransition } from "react";
+import { Trash2, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import {
   Drawer,
@@ -11,52 +12,52 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/src/components/ui/drawer";
+import { startCheckoutAction } from "@/src/server/actions/ebooks";
 import { useCart } from "./cart-context";
 
 export function CartDrawer() {
   const {
     items,
     removeItem,
-    updateQuantity,
     isOpen,
     setIsOpen,
     itemCount,
     subtotal,
   } = useCart();
+  const [pending, startTransition] = useTransition();
 
-  const shipping = 0;
-  const total = subtotal + shipping;
+  const total = subtotal;
 
   return (
-    <Drawer open={isOpen} onOpenChange={setIsOpen} direction="right">
-      <DrawerContent className="h-full w-full sm:max-w-[440px]">
-        <DrawerHeader className="border-b border-border/50 p-6 py-2.5">
+    <Drawer open={isOpen} onOpenChange={setIsOpen} swipeDirection="right">
+      <DrawerContent>
+        <DrawerHeader className="border-b border-border/50 p-6 py-2.5 text-left">
           <DrawerTitle className="font-serif text-2xl">Carrinho</DrawerTitle>
           <DrawerDescription>
-            {itemCount} {itemCount === 1 ? "item" : "itens"}
+            {itemCount} {itemCount === 1 ? "e-book" : "e-books"}
           </DrawerDescription>
         </DrawerHeader>
 
-        {/* Cart Items */}
         <div className="flex-1 overflow-y-auto p-6">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <ShoppingBag className="w-12 h-12 text-muted-foreground/50 mb-4" />
               <p className="text-muted-foreground">Seu carrinho esta vazio</p>
-              <DrawerClose asChild>
-                <button
-                  type="button"
-                  className="mt-4 text-primary hover:underline text-sm"
-                >
-                  Continuar Comprando
-                </button>
+              <DrawerClose
+                render={
+                  <button
+                    type="button"
+                    className="mt-4 text-primary hover:underline text-sm"
+                  />
+                }
+              >
+                Continuar Comprando
               </DrawerClose>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="flex flex-col gap-6">
               {items.map((item) => (
                 <div key={item.id} className="flex gap-4">
-                  {/* Product Image */}
                   <div className="relative w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-muted">
                     <Image
                       src={item.image || "/placeholder.svg"}
@@ -66,7 +67,6 @@ export function CartDrawer() {
                     />
                   </div>
 
-                  {/* Product Details */}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-serif text-base text-foreground mb-1 font-semibold">
                       {item.name}
@@ -74,50 +74,19 @@ export function CartDrawer() {
                     <p className="text-muted-foreground mb-3 text-sm">
                       {item.description}
                     </p>
-
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center border border-border rounded-full">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateQuantity(item.id, item.quantity - 1)
-                          }
-                          className="p-1.5 hover:bg-muted vivi-transition rounded-l-full"
-                          aria-label="Diminuir quantidade"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="px-3 text-sm font-medium">
-                          {item.quantity}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateQuantity(item.id, item.quantity + 1)
-                          }
-                          className="p-1.5 hover:bg-muted vivi-transition rounded-r-full"
-                          aria-label="Aumentar quantidade"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => removeItem(item.id)}
-                        className="p-1.5 text-muted-foreground hover:text-destructive vivi-transition"
-                        aria-label="Remover item"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeItem(item.id)}
+                      className="p-1.5 text-muted-foreground hover:text-destructive vivi-transition"
+                      aria-label="Remover item"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
 
-                  {/* Price */}
                   <div className="text-right">
                     <p className="font-medium text-foreground">
-                      R$ {item.price * item.quantity}
+                      R$ {item.price}
                     </p>
                   </div>
                 </div>
@@ -128,37 +97,44 @@ export function CartDrawer() {
 
         {items.length > 0 && (
           <DrawerFooter className="border-t border-border/50 p-6 gap-4">
-            {/* Summary */}
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between text-muted-foreground">
-                <span>Subtotal</span>
-                <span>R$ {subtotal}</span>
-              </div>
-              <div className="flex justify-between text-muted-foreground">
-                <span>Frete</span>
-                <span>{shipping === 0 ? "Gratis" : `R$ ${shipping}`}</span>
-              </div>
-              <div className="flex justify-between text-base font-medium text-foreground pt-2 border-t border-border/50">
-                <span>Total</span>
-                <span>R$ {total}</span>
-              </div>
+            <div className="flex justify-between text-base font-medium text-foreground pt-2">
+              <span>Total</span>
+              <span>R$ {total}</span>
             </div>
 
-            {/* Checkout Button */}
             <button
               type="button"
-              className="w-full bg-primary text-primary-foreground py-4 rounded-full font-medium hover:bg-primary/90 vivi-transition"
+              disabled={pending}
+              className="w-full bg-primary text-primary-foreground py-4 rounded-full font-medium hover:bg-primary/90 vivi-transition disabled:opacity-60"
+              onClick={() => {
+                startTransition(async () => {
+                  try {
+                    const result = await startCheckoutAction(
+                      items.map((item) => item.id),
+                    )
+                    if (!result.success) {
+                      alert(result.error)
+                      return
+                    }
+                    window.location.href = result.data.url
+                  } catch {
+                    alert("Não foi possível iniciar o checkout. Tente novamente.")
+                  }
+                })
+              }}
             >
-              Finalizar Compra
+              {pending ? "A redirecionar..." : "Finalizar Compra"}
             </button>
 
-            <DrawerClose asChild>
-              <button
-                type="button"
-                className="w-full border border-border text-foreground py-4 rounded-full font-medium hover:bg-muted vivi-transition"
-              >
-                Continuar Comprando
-              </button>
+            <DrawerClose
+              render={
+                <button
+                  type="button"
+                  className="w-full border border-border text-foreground py-4 rounded-full font-medium hover:bg-muted vivi-transition"
+                />
+              }
+            >
+              Continuar Comprando
             </DrawerClose>
           </DrawerFooter>
         )}
