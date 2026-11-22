@@ -1,3 +1,12 @@
+# Agent rules — projeto
+
+## Git commits
+
+- Message = **title only** (one short line). No body.
+- Title must be in **English** (e.g. `fix: hide Materiais when DB has no ebooks`).
+- **Never** include `Co-authored-by` or AI/Cursor authorship trailers.
+- Use `git commit -m "type: summary"`; if HEREDOC, only the title line.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know

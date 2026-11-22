@@ -15,7 +15,7 @@ export default function TermosPage() {
         <div className="flex flex-col gap-4 text-foreground/90 leading-relaxed">
           <p>
             Estes Termos regulam o uso do site e a compra de e-books digitais
-            oferecidos por Vitoria Vizzotto Moreira.
+            oferecidos por Vitoria Moreira.
           </p>
           <h2 className="font-serif text-2xl mt-4">1. Conta</h2>
           <p>

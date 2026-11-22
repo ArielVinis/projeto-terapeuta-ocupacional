@@ -56,7 +56,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <h2 className="font-serif text-2xl text-foreground mb-2">
-              <span className="text-primary">Vitoria</span> Vizzotto
+              <span className="text-primary">Vitoria</span> Moreira
             </h2>
             <p className="text-xs text-primary mb-4">
               Terapeuta Ocupacional - CREFITO
@@ -129,7 +129,7 @@ export function Footer() {
           </div>
 
           {/* Contato Links */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <h3 className="font-medium text-foreground mb-4">Contato</h3>
             <ul className="space-y-3">
               {footerLinks.contato.map((link) => (
@@ -143,9 +143,11 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            <div className="mt-6 flex items-start gap-2 text-sm text-muted-foreground">
-              <MapPin className="mt-0.5 shrink-0 size-4" />
-              <span>Atendimento presencial e on-line</span>
+            <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
+              <MapPin className="shrink-0 size-4" />
+              <span className="whitespace-nowrap">
+                Atendimento presencial e online
+              </span>
             </div>
           </div>
         </div>
@@ -154,7 +156,7 @@ export function Footer() {
         <div className="pt-10 border-t border-border/50">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Vitoria Vizzotto Moreira. Todos os
+              © {new Date().getFullYear()} Vitoria Moreira. Todos os
               direitos reservados.
             </p>
             <div className="flex gap-6">

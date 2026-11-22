@@ -47,7 +47,7 @@ export function Header() {
               Sobre
             </Link>
             <Link
-              href={PATHS.hash.materiais}
+              href={PATHS.shop}
               className="text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
             >
               Materiais
@@ -63,7 +63,7 @@ export function Header() {
           {/* Logo */}
           <Link href={PATHS.home} className="absolute left-1/2 -translate-x-1/2">
             <h1 className="font-serif text-2xl tracking-wide text-foreground">
-              <span className="text-primary">Vitoria</span> Vizzotto
+              <span className="text-primary">Vitoria</span> Moreira
             </h1>
           </Link>
 
@@ -122,7 +122,7 @@ export function Header() {
               Sobre
             </Link>
             <Link
-              href={PATHS.hash.materiais}
+              href={PATHS.shop}
               className="text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
               onClick={() => setIsMenuOpen(false)}
             >

@@ -108,7 +108,7 @@ export function Hero() {
             <div className="relative aspect-4/5 rounded-3xl overflow-hidden vivi-shadow">
               <Image
                 src={ASSETS.hero}
-                alt="Vitoria Vizzotto Moreira - Terapeuta Ocupacional"
+                alt="Vitoria Moreira - Terapeuta Ocupacional"
                 fill
                 className="object-cover"
                 priority

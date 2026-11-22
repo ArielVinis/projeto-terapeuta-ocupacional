@@ -46,6 +46,10 @@ export function AboutMe() {
   const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const bentoNode = bentoRef.current;
+    const aboutNode = aboutSectionRef.current;
+    const headerNode = headerRef.current;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -73,28 +77,14 @@ export function AboutMe() {
       { threshold: 0.1 },
     );
 
-    if (bentoRef.current) {
-      observer.observe(bentoRef.current);
-    }
-
-    if (aboutSectionRef.current) {
-      aboutObserver.observe(aboutSectionRef.current);
-    }
-
-    if (headerRef.current) {
-      headerObserver.observe(headerRef.current);
-    }
+    if (bentoNode) observer.observe(bentoNode);
+    if (aboutNode) aboutObserver.observe(aboutNode);
+    if (headerNode) headerObserver.observe(headerNode);
 
     return () => {
-      if (bentoRef.current) {
-        observer.unobserve(bentoRef.current);
-      }
-      if (aboutSectionRef.current) {
-        aboutObserver.unobserve(aboutSectionRef.current);
-      }
-      if (headerRef.current) {
-        headerObserver.unobserve(headerRef.current);
-      }
+      if (bentoNode) observer.unobserve(bentoNode);
+      if (aboutNode) aboutObserver.unobserve(aboutNode);
+      if (headerNode) headerObserver.unobserve(headerNode);
     };
   }, []);
 
@@ -257,7 +247,7 @@ export function AboutMe() {
           >
             <Image
               src={ASSETS.aboutMe}
-              alt="Vitoria Vizzotto Moreira"
+              alt="Vitoria Moreira"
               fill
               className="object-cover"
             />
@@ -290,7 +280,7 @@ export function AboutMe() {
                   : {}
               }
             >
-              Vitoria Vizzotto Moreira
+              Vitoria Moreira
             </h2>
             <p
               className={`text-lg text-muted-foreground leading-relaxed mb-6 ${isAboutVisible ? "animate-blur-in opacity-0" : "opacity-0"}`}

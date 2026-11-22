@@ -101,6 +101,9 @@ export function Testimonials() {
   const column3 = [testimonials[2], testimonials[5], testimonials[8]];
 
   useEffect(() => {
+    const headerNode = headerRef.current;
+    if (!headerNode) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -110,15 +113,8 @@ export function Testimonials() {
       { threshold: 0.1 },
     );
 
-    if (headerRef.current) {
-      observer.observe(headerRef.current);
-    }
-
-    return () => {
-      if (headerRef.current) {
-        observer.unobserve(headerRef.current);
-      }
-    };
+    observer.observe(headerNode);
+    return () => observer.unobserve(headerNode);
   }, []);
 
   return (
