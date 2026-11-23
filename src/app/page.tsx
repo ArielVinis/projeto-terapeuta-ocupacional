@@ -5,6 +5,7 @@ import { AboutMe } from "@/src/components/boty/about-me";
 import { ProductGrid } from "@/src/components/boty/product-grid";
 import { CTABanner } from "@/src/components/boty/cta-banner";
 import { Footer } from "@/src/components/boty/footer";
+import { SiteIntro } from "@/src/components/boty/site-intro";
 import { listActiveEbooks } from "@/src/server/ebook/queries";
 
 export default async function HomePage() {
@@ -12,6 +13,7 @@ export default async function HomePage() {
 
   return (
     <main>
+      <SiteIntro />
       <Header />
       <Hero />
       <TrustBadges />

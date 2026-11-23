@@ -6,6 +6,7 @@ import { CartProvider } from "@/src/components/boty/cart-context";
 import "./globals.css";
 import { cn } from "@/src/lib/utils";
 import { Toaster } from "@/src/components/ui/sonner";
+import { INTRO_FAILSAFE_MS } from "@/src/components/boty/site-intro-decision";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -57,16 +58,25 @@ export const viewport: Viewport = {
   themeColor: "#FBF9F7",
 };
 
+/** Evita flash do conteúdo antes da intro na home (1× por sessão). Usa data-* para não conflitar com className do React. Failsafe remove o lock se o client não limpar. */
+const INTRO_BOOT = `(function(){try{var r=matchMedia("(prefers-reduced-motion: reduce)").matches;if(location.pathname==="/"&&!r&&!sessionStorage.getItem("vivi-intro")){var d=document.documentElement;d.setAttribute("data-vivi-intro","pending");setTimeout(function(){if(d.getAttribute("data-vivi-intro")==="pending")d.removeAttribute("data-vivi-intro")},${INTRO_FAILSAFE_MS})}}catch(e){}})()`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={cn("bg-background", "font-sans", geist.variable)}>
+    <html
+      lang="pt-BR"
+      data-scroll-behavior="smooth"
+      className={cn("bg-background", "font-sans", geist.variable)}
+      suppressHydrationWarning
+    >
       <body
         className={`${dmSans.variable} ${playfairDisplay.variable} font-sans antialiased`}
       >
+        <script dangerouslySetInnerHTML={{ __html: INTRO_BOOT }} />
         <CartProvider>
           {children}
           <Toaster />

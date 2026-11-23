@@ -201,3 +201,238 @@
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
+
+/* —— Site intro (home) —— */
+:root {
+  --vivi-intro-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-vivi-intro="pending"] {
+  overflow: hidden;
+}
+
+#nav-brand {
+  transition: opacity 0.45s var(--vivi-intro-ease);
+}
+
+html[data-vivi-intro="pending"] #nav-brand {
+  opacity: 0;
+}
+
+html[data-vivi-intro="pending"] .site-intro {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.site-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 40%,
+      color-mix(in oklab, var(--card) 88%, var(--primary) 12%),
+      transparent 70%
+    ),
+    var(--card);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.7s var(--vivi-intro-ease),
+    visibility 0.7s;
+}
+
+.site-intro-stage {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.site-intro-mark {
+  transform-origin: center center;
+  transition:
+    transform 1s var(--vivi-intro-ease),
+    opacity 0.45s var(--vivi-intro-ease) 0.35s;
+}
+
+.site-intro-name {
+  margin: 0;
+  font-size: clamp(2.25rem, 8vw, 4rem);
+  line-height: 1.1;
+  color: var(--foreground);
+}
+
+.site-intro-first,
+.site-intro-last {
+  display: inline-block;
+  opacity: 0;
+  transform: scale(0.9) translateY(14px);
+}
+
+.site-intro-meta {
+  display: grid;
+  gap: 0.65rem;
+  justify-items: center;
+  max-width: min(36rem, calc(100vw - 3rem));
+  transition:
+    opacity 0.4s var(--vivi-intro-ease),
+    transform 0.45s var(--vivi-intro-ease);
+}
+
+.site-intro-role {
+  margin: 0;
+  font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.site-intro-badge {
+  margin: 0;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--primary) 35%, transparent);
+  background: color-mix(in oklab, var(--primary) 8%, transparent);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.site-intro-line {
+  margin: 0;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.site-intro-line-care {
+  margin-top: 0.35rem;
+  font-size: clamp(0.95rem, 2.8vw, 1.15rem);
+  line-height: 1.35;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+
+@media (max-width: 22rem) {
+  .site-intro-line-care {
+    white-space: normal;
+  }
+}
+
+.site-intro-line-focus {
+  font-size: clamp(0.78rem, 2.2vw, 0.9rem);
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+}
+
+.site-intro-line-invite {
+  font-size: clamp(0.88rem, 2.4vw, 1rem);
+  font-style: italic;
+  color: color-mix(in oklab, var(--foreground) 78%, var(--primary) 22%);
+}
+
+.site-intro-hint {
+  margin: 1.5rem 0 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary);
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.site-intro.play .site-intro-first {
+  animation: site-intro-in 0.85s var(--vivi-intro-ease) 0.08s forwards;
+}
+
+.site-intro.play .site-intro-last {
+  animation: site-intro-in 0.85s var(--vivi-intro-ease) 0.32s forwards;
+}
+
+.site-intro.play .site-intro-role {
+  animation: site-intro-in 0.8s var(--vivi-intro-ease) 0.55s forwards;
+}
+
+.site-intro.play .site-intro-badge {
+  animation: site-intro-in 0.75s var(--vivi-intro-ease) 0.72s forwards;
+}
+
+.site-intro.play .site-intro-line-care {
+  animation: site-intro-in 0.75s var(--vivi-intro-ease) 0.9s forwards;
+}
+
+.site-intro.play .site-intro-line-focus {
+  animation: site-intro-in 0.75s var(--vivi-intro-ease) 1.05s forwards;
+}
+
+.site-intro.play .site-intro-line-invite {
+  animation: site-intro-in 0.75s var(--vivi-intro-ease) 1.2s forwards;
+}
+
+.site-intro.play .site-intro-hint {
+  animation:
+    site-intro-in 0.7s var(--vivi-intro-ease) 1.4s forwards,
+    site-intro-pulse 1.8s ease-in-out 2.1s infinite;
+}
+
+@keyframes site-intro-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.site-intro.leave {
+  opacity: 0;
+}
+
+.site-intro.leave .site-intro-mark {
+  opacity: 0;
+}
+
+.site-intro.leave .site-intro-meta,
+.site-intro.leave .site-intro-hint {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+@keyframes site-intro-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-intro,
+  .site-intro-mark,
+  .site-intro-meta,
+  #nav-brand {
+    transition: none;
+  }
+
+  .site-intro-first,
+  .site-intro-last,
+  .site-intro-role,
+  .site-intro-badge,
+  .site-intro-line,
+  .site-intro-hint {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

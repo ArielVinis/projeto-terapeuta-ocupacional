@@ -60,8 +60,12 @@ export function Header() {
             </Link>
           </div>
 
-          {/* Logo */}
-          <Link href={PATHS.home} className="absolute left-1/2 -translate-x-1/2">
+          {/* Logo — destino da intro */}
+          <Link
+            id="nav-brand"
+            href={PATHS.home}
+            className="absolute left-1/2 -translate-x-1/2"
+          >
             <h1 className="font-serif text-2xl tracking-wide text-foreground">
               <span className="text-primary">Vitoria</span> Moreira
             </h1>
