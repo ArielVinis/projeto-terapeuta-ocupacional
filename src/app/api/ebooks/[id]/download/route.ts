@@ -12,7 +12,10 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   const session = await getSession();
   if (!session) {
     return NextResponse.redirect(
-      new URL(`${PATHS.login}?callbackUrl=${encodeURIComponent(PATHS.meusEbooks)}`, env.appUrl),
+      new URL(
+        `${PATHS.auth.login}?callbackUrl=${encodeURIComponent(PATHS.profile.ebooks)}`,
+        env.appUrl,
+      ),
     );
   }
 

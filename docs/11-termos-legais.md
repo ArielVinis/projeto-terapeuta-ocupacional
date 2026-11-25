@@ -1,6 +1,6 @@
 # 11 — Termos e Privacidade
 
-**Objetivo:** Páginas legais + links no footer/login.
+**Objetivo:** Páginas legais + links no footer e em `/auth/login`.
 
 **Acceptance:**
 

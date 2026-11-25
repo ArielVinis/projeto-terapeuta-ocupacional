@@ -56,7 +56,7 @@ export function AdminSidebar() {
 
   async function handleLogout() {
     await authClient.signOut()
-    router.push(PATHS.login)
+    router.push(PATHS.auth.login)
     router.refresh()
   }
 

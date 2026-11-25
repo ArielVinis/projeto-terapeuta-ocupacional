@@ -5,7 +5,7 @@ import { PATHS } from "@/src/constants/paths";
  */
 export function safeCallbackUrl(
   raw: string | null | undefined,
-  fallback: string = PATHS.meusEbooks,
+  fallback: string = PATHS.profile.ebooks,
 ): string {
   if (!raw) return fallback;
   if (!raw.startsWith("/") || raw.startsWith("//") || raw.includes("\\")) {

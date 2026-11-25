@@ -20,7 +20,7 @@ export default async function MeusEbooksPage({
 }: {
   searchParams: Promise<{ checkout?: string }>
 }) {
-  const session = await requireSession(PATHS.meusEbooks)
+  const session = await requireSession(PATHS.profile.ebooks)
   const params = await searchParams
 
   let items: Awaited<ReturnType<typeof listUserEntitlements>> = []
@@ -33,18 +33,26 @@ export default async function MeusEbooksPage({
   return (
     <main className="min-h-screen bg-background px-6 py-16">
       <div className="max-w-3xl mx-auto flex flex-col gap-8">
-        <div>
-          <h1 className="font-serif text-4xl mb-2">Meus e-books</h1>
-          <p className="text-muted-foreground">
-            Olá, {session.user.name}. Seus downloads aparecem aqui após o
-            pagamento.
-          </p>
-          {params.checkout === "success" && (
-            <p className="mt-3 text-sm text-primary">
-              Pagamento recebido. Se o e-book ainda não aparecer, aguarde alguns
-              segundos e atualize a página.
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 className="font-serif text-4xl mb-2">Meus e-books</h1>
+            <p className="text-muted-foreground">
+              Olá, {session.user.name}. Seus downloads aparecem aqui após o
+              pagamento.
             </p>
-          )}
+            {params.checkout === "success" && (
+              <p className="mt-3 text-sm text-primary">
+                Pagamento recebido. Se o e-book ainda não aparecer, aguarde
+                alguns segundos e atualize a página.
+              </p>
+            )}
+          </div>
+          <Link
+            href={PATHS.profile.password}
+            className="text-sm text-primary hover:underline shrink-0"
+          >
+            Alterar senha
+          </Link>
         </div>
 
         {items.length === 0 ? (

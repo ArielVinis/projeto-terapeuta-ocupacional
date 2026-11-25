@@ -8,14 +8,14 @@ Site profissional com apresentação do trabalho, loja de e-books e área do cli
 
 ## O que o site faz
 
-| Área                          | Para quem             | O que permite                                     |
-| ----------------------------- | --------------------- | ------------------------------------------------- |
-| Página inicial                | Visitantes            | Conhecer a abordagem, serviços e agendar contacto |
-| Loja (`/shop`)                | Visitantes / clientes | Ver e comprar e-books                             |
-| Login                         | Clientes              | Conta com e-mail/senha ou Google                  |
-| Meus e-books (`/meus-ebooks`) | Clientes autenticados | Baixar os PDFs comprados                          |
-| Admin (`/admin`)              | Você (profissional)   | Criar e atualizar e-books e PDFs                  |
-| Termos / Privacidade          | Todos                 | Páginas legais                                    |
+| Área                             | Para quem             | O que permite                                     |
+| -------------------------------- | --------------------- | ------------------------------------------------- |
+| Página inicial                   | Visitantes            | Conhecer a abordagem, serviços e agendar contacto |
+| Loja (`/shop`)                   | Visitantes / clientes | Ver e comprar e-books                             |
+| Login (`/auth/login`)            | Clientes              | Conta com e-mail/senha ou Google                  |
+| Meus e-books (`/profile/ebooks`) | Clientes autenticados | Baixar os PDFs comprados                          |
+| Admin (`/admin`)                 | Você (profissional)   | Criar e atualizar e-books e PDFs                  |
+| Termos / Privacidade             | Todos                 | Páginas legais                                    |
 
 Pagamentos: **cartão** e **Pix** (Stripe). Sem boleto.
 
@@ -77,6 +77,7 @@ npm run dev            # http://localhost:3000
 | `DATABASE_URL`                              | Postgres (Neon)                                   |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Login Google                                      |
 | `ADMIN_EMAIL`                               | Seu e-mail de admin                               |
+| `RESEND_API_KEY` / `EMAIL_FROM`             | E-mail de redefinição de senha (Resend)           |
 | `STRIPE_*`                                  | Pagamentos (cartão + Pix)                         |
 | `BLOB_READ_WRITE_TOKEN`                     | Armazenamento dos PDFs                            |
 
@@ -95,10 +96,11 @@ Copie o `whsec_...` para `STRIPE_WEBHOOK_SECRET`. Guia: [`docs/09-stripe-cli.md`
 ## Estrutura útil
 
 ```
-src/app/          → páginas (loja, login, admin, legais)
+src/app/          → páginas (loja, auth, profile, admin, legais)
 src/components/   → interface (home, carrinho, etc.)
 src/server/       → auth, e-books, Stripe, Blob
 src/constants/    → rotas (PATHS) e imagens (ASSETS)
+test/             → testes unitários
 public/assets/    → fotos do site
 docs/             → roadmap e notas técnicas
 ```

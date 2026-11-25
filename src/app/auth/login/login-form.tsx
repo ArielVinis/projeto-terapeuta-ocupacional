@@ -21,7 +21,7 @@ export function LoginForm() {
 
   function postLoginPath(user?: { role?: string | null } | null) {
     if (rawCallback) return callbackUrl
-    return user?.role === "admin" ? PATHS.admin.root : PATHS.meusEbooks
+    return user?.role === "admin" ? PATHS.admin.root : PATHS.profile.ebooks
   }
 
   async function onSubmit(event: SubmitEvent<HTMLFormElement>) {
@@ -69,7 +69,7 @@ export function LoginForm() {
       provider: "google",
       callbackURL: rawCallback
         ? callbackUrl
-        : PATHS.meusEbooks,
+        : PATHS.profile.ebooks,
     })
   }
 
@@ -165,6 +165,17 @@ export function LoginForm() {
         {error && (
           <p role="alert" className="text-sm text-destructive">
             {error}
+          </p>
+        )}
+
+        {mode === "login" && (
+          <p className="text-sm text-right">
+            <Link
+              href={PATHS.auth.forgotPassword}
+              className="text-primary hover:underline"
+            >
+              Esqueci a senha
+            </Link>
           </p>
         )}
 

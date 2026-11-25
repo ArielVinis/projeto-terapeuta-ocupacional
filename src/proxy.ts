@@ -7,11 +7,12 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const sessionCookie = getSessionCookie(request);
 
-  const needsAuth = pathname.startsWith(PATHS.meusEbooks) || pathname.startsWith(PATHS.admin.root);
+  const needsAuth =
+    pathname.startsWith(PATHS.profile.root) || pathname.startsWith(PATHS.admin.root);
 
   if (needsAuth && !sessionCookie) {
     const url = request.nextUrl.clone();
-    url.pathname = PATHS.login;
+    url.pathname = PATHS.auth.login;
     url.searchParams.set("callbackUrl", safeCallbackUrl(pathname));
     return NextResponse.redirect(url);
   }
@@ -20,5 +21,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/meus-ebooks/:path*", "/admin/:path*"],
+  matcher: ["/profile/:path*", "/admin/:path*"],
 };
