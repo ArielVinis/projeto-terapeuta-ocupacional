@@ -148,7 +148,7 @@ export async function deleteEbookAction(id: string): Promise<ActionResult> {
     await deleteBlobBestEffort(deleted.blobPath);
 
     revalidateEbookPaths();
-    revalidatePath(PATHS.meusEbooks);
+    revalidatePath(PATHS.profile.ebooks);
     return { success: true, data: undefined };
   } catch (error) {
     return {
@@ -198,7 +198,7 @@ export async function startCheckoutAction(
       userId: session.user.id,
       userEmail: session.user.email,
       items,
-      successUrl: `${baseUrl}${PATHS.meusEbooks}?checkout=success`,
+      successUrl: `${baseUrl}${PATHS.profile.ebooks}?checkout=success`,
       cancelUrl: `${baseUrl}${PATHS.shop}?checkout=cancel`,
     });
     if (!checkout.url) {
@@ -216,7 +216,7 @@ export async function startCheckoutAction(
 export async function getDownloadUrlAction(
   ebookId: string,
 ): Promise<ActionResult<{ url: string }>> {
-  const session = await requireSession(PATHS.meusEbooks);
+  const session = await requireSession(PATHS.profile.ebooks);
   if (!z.uuid().safeParse(ebookId).success) {
     return { success: false, error: "E-book inválido" };
   }

@@ -4,7 +4,7 @@
 
 **Acceptance:**
 
-- [x] `/meus-ebooks` lista entitlements
+- [x] `/profile/ebooks` lista entitlements
 - [x] Download só com entitlement
 - [x] Sem path público permanente do PDF (`GET /api/ebooks/[id]/download` + Blob `get` com `access: "private"`)
 
@@ -12,7 +12,7 @@
 
 **Dependencies:** 09
 
-**Files:** `src/app/meus-ebooks/**`, `src/app/api/ebooks/[id]/download/**`, `src/server/blob/**`, `src/server/ebook/**`
+**Files:** `src/app/profile/ebooks/**`, `src/app/api/ebooks/[id]/download/**`, `src/server/blob/**`, `src/server/ebook/**`
 
 ## Status: concluído
 

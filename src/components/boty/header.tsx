@@ -74,7 +74,7 @@ export function Header() {
           {/* Right Actions */}
           <div className="flex items-center gap-4">
             <Link
-              href={PATHS.login}
+              href={PATHS.auth.login}
               className="hidden sm:inline text-sm tracking-wide text-foreground/70 hover:text-primary vivi-transition"
             >
               Entrar

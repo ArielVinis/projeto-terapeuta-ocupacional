@@ -9,11 +9,11 @@ export async function getSession() {
   return auth.api.getSession({ headers: await headers() });
 }
 
-export async function requireSession(callbackUrl: string = PATHS.meusEbooks) {
+export async function requireSession(callbackUrl: string = PATHS.profile.ebooks) {
   const session = await getSession();
   if (!session) {
-    const safe = safeCallbackUrl(callbackUrl, PATHS.meusEbooks);
-    redirect(`${PATHS.login}?callbackUrl=${encodeURIComponent(safe)}`);
+    const safe = safeCallbackUrl(callbackUrl, PATHS.profile.ebooks);
+    redirect(`${PATHS.auth.login}?callbackUrl=${encodeURIComponent(safe)}`);
   }
   return session;
 }
@@ -26,7 +26,7 @@ export function isAdminUser(session: NonNullable<Awaited<ReturnType<typeof getSe
 }
 
 export function loggedInHomePath(session: NonNullable<Awaited<ReturnType<typeof getSession>>>) {
-  return isAdminUser(session) ? PATHS.admin.root : PATHS.meusEbooks;
+  return isAdminUser(session) ? PATHS.admin.root : PATHS.profile.ebooks;
 }
 
 export async function requireAdmin(callbackUrl: string = PATHS.admin.root) {

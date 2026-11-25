@@ -3,8 +3,18 @@ export const PATHS = Object.freeze({
   shop: "/shop",
   product: (id: string) => `/product/${id}`,
 
-  login: "/login",
-  meusEbooks: "/meus-ebooks",
+  auth: {
+    root: "/auth",
+    login: "/auth/login",
+    forgotPassword: "/auth/forgot-password",
+    resetPassword: "/auth/reset-password",
+  },
+
+  profile: {
+    root: "/profile",
+    ebooks: "/profile/ebooks",
+    password: "/profile/password",
+  },
 
   admin: {
     root: "/admin",
